@@ -1,0 +1,137 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * HELLOW Design System
+ * Beige matte premium palette. All colors in oklch.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-rail: var(--rail);
+  --color-rail-foreground: var(--rail-foreground);
+
+  --shadow-soft: 0 1px 2px oklch(0.2 0.02 80 / 0.04), 0 2px 8px oklch(0.2 0.02 80 / 0.05);
+  --shadow-card: 0 1px 0 oklch(0.2 0.02 80 / 0.04), 0 4px 16px oklch(0.2 0.02 80 / 0.06);
+  --shadow-pop: 0 10px 40px -10px oklch(0.2 0.02 80 / 0.18);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* Beige matte palette */
+  --background: oklch(0.965 0.012 85);          /* page beige */
+  --foreground: oklch(0.22 0.015 70);           /* near-black warm */
+  --surface: oklch(0.985 0.008 85);             /* cards / panels */
+  --surface-foreground: oklch(0.22 0.015 70);
+
+  --card: oklch(0.985 0.008 85);
+  --card-foreground: oklch(0.22 0.015 70);
+  --popover: oklch(0.99 0.006 85);
+  --popover-foreground: oklch(0.22 0.015 70);
+
+  --primary: oklch(0.18 0.012 60);              /* black pill / dark CTA */
+  --primary-foreground: oklch(0.97 0.01 85);
+
+  --secondary: oklch(0.93 0.012 85);
+  --secondary-foreground: oklch(0.25 0.015 70);
+
+  --muted: oklch(0.94 0.012 85);
+  --muted-foreground: oklch(0.5 0.012 75);
+
+  --accent: oklch(0.92 0.015 80);
+  --accent-foreground: oklch(0.22 0.015 70);
+
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 85);
+
+  --border: oklch(0.9 0.012 85);
+  --input: oklch(0.92 0.012 85);
+  --ring: oklch(0.55 0.02 70);
+
+  /* Left sidebar (chat rooms) */
+  --sidebar: oklch(0.95 0.012 85);
+  --sidebar-foreground: oklch(0.22 0.015 70);
+  --sidebar-border: oklch(0.9 0.012 85);
+
+  /* Right utility rail */
+  --rail: oklch(0.97 0.01 85);
+  --rail-foreground: oklch(0.3 0.012 75);
+}
+
+.dark {
+  --background: oklch(0.18 0.012 70);
+  --foreground: oklch(0.96 0.01 85);
+  --surface: oklch(0.22 0.012 70);
+  --surface-foreground: oklch(0.96 0.01 85);
+  --card: oklch(0.22 0.012 70);
+  --card-foreground: oklch(0.96 0.01 85);
+  --popover: oklch(0.22 0.012 70);
+  --popover-foreground: oklch(0.96 0.01 85);
+  --primary: oklch(0.96 0.01 85);
+  --primary-foreground: oklch(0.18 0.012 70);
+  --secondary: oklch(0.28 0.012 70);
+  --secondary-foreground: oklch(0.96 0.01 85);
+  --muted: oklch(0.26 0.012 70);
+  --muted-foreground: oklch(0.7 0.012 75);
+  --accent: oklch(0.3 0.012 70);
+  --accent-foreground: oklch(0.96 0.01 85);
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(0.98 0.01 85);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.55 0.02 70);
+  --sidebar: oklch(0.2 0.012 70);
+  --sidebar-foreground: oklch(0.96 0.01 85);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --rail: oklch(0.22 0.012 70);
+  --rail-foreground: oklch(0.85 0.012 80);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+}
