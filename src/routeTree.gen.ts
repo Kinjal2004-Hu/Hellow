@@ -9,9 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as SpotsyncRouteImport } from './routes/spotsync'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OauthCallbackRouteImport } from './routes/oauth-callback'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as MeetingsRouteImport } from './routes/meetings'
@@ -20,6 +22,11 @@ import { Route as DriveRouteImport } from './routes/drive'
 import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpotsyncRoute = SpotsyncRouteImport.update({
   id: '/spotsync',
   path: '/spotsync',
@@ -33,6 +40,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth-callback',
+  path: '/oauth-callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRoute = NewsRouteImport.update({
@@ -79,9 +91,11 @@ export interface FileRoutesByFullPath {
   '/meetings': typeof MeetingsRoute
   '/music': typeof MusicRoute
   '/news': typeof NewsRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/spotsync': typeof SpotsyncRoute
+  '/workspace': typeof WorkspaceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,9 +105,11 @@ export interface FileRoutesByTo {
   '/meetings': typeof MeetingsRoute
   '/music': typeof MusicRoute
   '/news': typeof NewsRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/spotsync': typeof SpotsyncRoute
+  '/workspace': typeof WorkspaceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,9 +120,11 @@ export interface FileRoutesById {
   '/meetings': typeof MeetingsRoute
   '/music': typeof MusicRoute
   '/news': typeof NewsRoute
+  '/oauth-callback': typeof OauthCallbackRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/spotsync': typeof SpotsyncRoute
+  '/workspace': typeof WorkspaceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,9 +136,11 @@ export interface FileRouteTypes {
     | '/meetings'
     | '/music'
     | '/news'
+    | '/oauth-callback'
     | '/profile'
     | '/register'
     | '/spotsync'
+    | '/workspace'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,9 +150,11 @@ export interface FileRouteTypes {
     | '/meetings'
     | '/music'
     | '/news'
+    | '/oauth-callback'
     | '/profile'
     | '/register'
     | '/spotsync'
+    | '/workspace'
   id:
     | '__root__'
     | '/'
@@ -142,9 +164,11 @@ export interface FileRouteTypes {
     | '/meetings'
     | '/music'
     | '/news'
+    | '/oauth-callback'
     | '/profile'
     | '/register'
     | '/spotsync'
+    | '/workspace'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,13 +179,22 @@ export interface RootRouteChildren {
   MeetingsRoute: typeof MeetingsRoute
   MusicRoute: typeof MusicRoute
   NewsRoute: typeof NewsRoute
+  OauthCallbackRoute: typeof OauthCallbackRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   SpotsyncRoute: typeof SpotsyncRoute
+  WorkspaceRoute: typeof WorkspaceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/spotsync': {
       id: '/spotsync'
       path: '/spotsync'
@@ -181,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oauth-callback': {
+      id: '/oauth-callback'
+      path: '/oauth-callback'
+      fullPath: '/oauth-callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news': {
@@ -243,10 +283,22 @@ const rootRouteChildren: RootRouteChildren = {
   MeetingsRoute: MeetingsRoute,
   MusicRoute: MusicRoute,
   NewsRoute: NewsRoute,
+  OauthCallbackRoute: OauthCallbackRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   SpotsyncRoute: SpotsyncRoute,
+  WorkspaceRoute: WorkspaceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

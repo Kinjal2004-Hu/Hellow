@@ -44,33 +44,53 @@
   --color-rail: var(--rail);
   --color-rail-foreground: var(--rail-foreground);
 
-  --shadow-soft: 0 1px 2px oklch(0.2 0.02 80 / 0.04), 0 2px 8px oklch(0.2 0.02 80 / 0.05);
-  --shadow-card: 0 1px 0 oklch(0.2 0.02 80 / 0.04), 0 4px 16px oklch(0.2 0.02 80 / 0.06);
-  --shadow-pop: 0 10px 40px -10px oklch(0.2 0.02 80 / 0.18);
+  /* PRD-spec shadows */
+  --shadow-soft: 0 1px 3px oklch(0 0 0 / 0.06), 0 1px 2px oklch(0 0 0 / 0.04);
+  --shadow-card: 0 1px 3px oklch(0 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.04);
+  --shadow-pop: 0 10px 40px -10px oklch(0 0 0 / 0.18);
+
+  /* Premium easing curves */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Motion durations */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 0.75rem;
+
+  /* PRD typography scale */
+  --font-base-size: 15px;
+  --font-sm: 13px;
+  --font-xs: 11px;
+  --heading-xl: 28px;
+  --heading-lg: 20px;
 
   /* Beige matte palette */
-  --background: oklch(0.965 0.012 85);          /* page beige */
-  --foreground: oklch(0.22 0.015 70);           /* near-black warm */
-  --surface: oklch(0.985 0.008 85);             /* cards / panels */
+  --background: oklch(0.965 0.012 85);
+  --foreground: oklch(0.22 0.015 70);
+  --surface: oklch(0.985 0.008 85);
   --surface-foreground: oklch(0.22 0.015 70);
 
-  --card: oklch(0.985 0.008 85);
+  --card: oklch(0.99 0.006 85);
   --card-foreground: oklch(0.22 0.015 70);
   --popover: oklch(0.99 0.006 85);
   --popover-foreground: oklch(0.22 0.015 70);
 
-  --primary: oklch(0.18 0.012 60);              /* black pill / dark CTA */
+  --primary: oklch(0.18 0.012 60);
   --primary-foreground: oklch(0.97 0.01 85);
 
   --secondary: oklch(0.93 0.012 85);
   --secondary-foreground: oklch(0.25 0.015 70);
 
   --muted: oklch(0.94 0.012 85);
-  --muted-foreground: oklch(0.5 0.012 75);
+  --muted-foreground: oklch(0.52 0.012 75);
 
   --accent: oklch(0.92 0.015 80);
   --accent-foreground: oklch(0.22 0.015 70);
@@ -82,14 +102,12 @@
   --input: oklch(0.92 0.012 85);
   --ring: oklch(0.55 0.02 70);
 
-  /* Left sidebar (chat rooms) */
-  --sidebar: oklch(0.95 0.012 85);
+  --sidebar: oklch(0.955 0.01 85);
   --sidebar-foreground: oklch(0.22 0.015 70);
   --sidebar-border: oklch(0.9 0.012 85);
 
-  /* Right utility rail */
   --rail: oklch(0.97 0.01 85);
-  --rail-foreground: oklch(0.3 0.012 75);
+  --rail-foreground: oklch(0.35 0.012 75);
 }
 
 .dark {
@@ -125,6 +143,9 @@
   * {
     border-color: var(--color-border);
   }
+  html {
+    scroll-behavior: smooth;
+  }
   html, body, #root {
     height: 100%;
   }
@@ -133,5 +154,187 @@
     color: var(--color-foreground);
     font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: var(--font-base-size);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
   }
 }
+
+/* ── Typography overrides ── */
+.text-xs { font-size: var(--font-xs); }
+.text-sm { font-size: var(--font-sm); }
+.text-lg { font-size: var(--heading-lg); }
+.text-2xl { font-size: var(--heading-xl); }
+.text-3xl { font-size: 32px; font-weight: 700; }
+.text-4xl { font-size: 36px; }
+.text-5xl { font-size: 48px; }
+
+/* Card radius: PRD 12-16px */
+.rounded-xl { border-radius: 12px; }
+.rounded-2xl { border-radius: 16px; }
+
+/* Shadow utilities */
+.shadow-soft { box-shadow: var(--shadow-soft); }
+.shadow-card { box-shadow: var(--shadow-card); }
+
+/* ── Premium interaction utilities ── */
+
+/* Button press */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Card hover lift */
+.card-hover {
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px oklch(0 0 0 / 0.08);
+}
+
+/* Icon subtle pulse on hover */
+.icon-hover {
+  transition: transform var(--duration-fast) var(--ease-out-expo),
+              opacity var(--duration-fast) var(--ease-out-expo);
+}
+.icon-hover:hover {
+  transform: scale(1.08);
+}
+
+/* Fade in animation for mounted content */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(6px); }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out-expo);
+}
+.animate-fade-slide-up {
+  animation: fadeSlideUp var(--duration-normal) var(--ease-out-expo);
+}
+
+/* Panel slide from right */
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-slow) var(--ease-in-out-expo);
+}
+.animate-slide-out-right {
+  animation: slideOutRight var(--duration-normal) var(--ease-in-out-expo);
+  animation-fill-mode: forwards;
+}
+
+/* Scale entrance for modals */
+@keyframes modalEnter {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modalExit {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.96) translateY(8px); }
+}
+
+.animate-modal-enter {
+  animation: modalEnter var(--duration-normal) var(--ease-out-expo);
+}
+.animate-modal-exit {
+  animation: modalExit var(--duration-fast) var(--ease-in-expo);
+  animation-fill-mode: forwards;
+}
+
+/* Backdrop fade */
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes backdropFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.animate-backdrop-in {
+  animation: backdropFadeIn var(--duration-normal) var(--ease-out-expo);
+}
+.animate-backdrop-out {
+  animation: backdropFadeOut var(--duration-fast) var(--ease-in-expo);
+  animation-fill-mode: forwards;
+}
+
+/* Tooltip */
+.tooltip-enter {
+  animation: fadeSlideUp var(--duration-fast) var(--ease-out-expo);
+}
+
+/* Input focus ring */
+input:focus-visible, textarea:focus-visible {
+  transition: box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+/* ── Layout helpers ── */
+.bg-sidebar { background-color: var(--color-sidebar); }
+.border-sidebar-border { border-color: var(--color-sidebar-border); }
+.bg-rail { background-color: var(--color-rail); }
+
+/* Leaflet map container fix — ensure it respects flex bounds */
+.leaflet-container {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Ensure our SpotSync wrapper also cannot force the map taller than its flex parent */
+.spotsync-map {
+  /* Let the map fill the available flex area provided by the layout
+     (sidebar + map split). Avoid fixed pixel sizing so the map stays
+     centered and responsive within its parent. */
+  min-height: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+
+/* Convenience utilities used by SpotSync layout */
+.bg-muted { background-color: var(--color-muted); }
+.text-muted-foreground { color: var(--color-muted-foreground); }
+.icon-hover { transition: transform var(--duration-fast) var(--ease-out-expo), opacity var(--duration-fast) var(--ease-out-expo); }
+.icon-hover:hover { transform: scale(1.06); }
+.shadow-card { box-shadow: var(--shadow-card); }
+
+/* Ensure absolute controls sit above map container */
+.map-floating-controls { position: absolute; right: 1.5rem; bottom: 1.5rem; z-index: 30; display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* Music room specific styles */
+.queue-card { box-shadow: var(--shadow-soft); }
+.bg-emerald-50 { background-color: #ecfdf5; }
+.border-emerald-100 { border-color: #d1fae5; }
+.text-foreground\/50 { color: rgba(34,34,34,0.5); }
+.shadow-soft { box-shadow: var(--shadow-soft); }

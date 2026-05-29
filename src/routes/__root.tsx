@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -7,8 +8,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useAuthStore } from "@/store/useAuthStore";
 
 import appCss from "../styles.css?url";
+import { ThemeInit } from "@/components/ThemeInit";
+import { Toaster } from "@/components/ui/sonner";
+import { ModalManager } from "@/components/modals/ModalManager";
 
 function NotFoundComponent() {
   return (
@@ -77,8 +82,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "One calm place for everything you do." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "theme-color", content: "#F5F5F0" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -88,11 +101,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
+        <ThemeInit />
         {children}
         <Scripts />
       </body>
@@ -102,9 +116,23 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const hydrate = useAuthStore((s) => s.hydrate);
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <ModalManager />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          className:
+            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg",
+        }}
+      />
     </QueryClientProvider>
   );
 }
